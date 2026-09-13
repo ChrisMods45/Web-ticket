@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket #{{ ticket.id }} • ChrisAim</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+    <div class="bg-glow glow-one"></div>
+    <div class="bg-glow glow-two"></div>
+
+    <main class="page-shell">
+        <div class="topbar">
+            <a href="/" class="mini-brand">
+                <span class="mini-logo">CA</span>
+                <span>ChrisAim Support</span>
+            </a>
+            <span class="status closed">{{ ticket.status }}</span>
+        </div>
+
+        <section class="ticket-card">
+            <div class="ticket-header">
+                <div>
+                    <div class="eyebrow">SUPPORT TRANSCRIPT</div>
+                    <h1>Ticket #{{ ticket.id }}</h1>
+                    <p class="muted">
+                        {{ ticket.user.name }} · {{ ticket.user.username }}
+                    </p>
+                </div>
+                <div class="ticket-meta">
+                    <div>
+                        <span>Created</span>
+                        <strong>{{ ticket.created_at }}</strong>
+                    </div>
+                    <div>
+                        <span>Closed</span>
+                        <strong>{{ ticket.closed_at }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="chat">
+                {% for message in ticket.messages %}
+                <article class="message {% if message.role == 'support' %}support-message{% endif %}">
+                    <div class="avatar">
+                        {% if message.role == 'support' %}
+                        CA
+                        {% else %}
+                        {{ message.sender[0] }}
+                        {% endif %}
+                    </div>
+                    <div class="message-body">
+                        <div class="message-topline">
+                            <strong>{{ message.sender }}</strong>
+                            {% if message.role == 'support' %}
+                            <span class="staff-badge">STAFF</span>
+                            {% endif %}
+                            <span class="time">{{ message.time }}</span>
+                        </div>
+                        <div class="bubble">{{ message.text }}</div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="ticket-footer">
+                <span>🔒</span>
+                <div>
+                    <strong>This ticket is closed</strong>
+                    <p>The transcript is read-only.</p>
+                </div>
+            </div>
+        </section>
+
+        <p class="footer-note">ChrisAim Script • Support Transcript</p>
+    </main>
+</body>
+</html>
